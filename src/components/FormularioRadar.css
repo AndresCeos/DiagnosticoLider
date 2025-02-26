@@ -177,6 +177,12 @@
     height: 200px;
     border: solid 1px #333;
   }
+  .textareabrief{
+    height: 200px;
+    width: 100%;
+    border: solid 1px #ccc;
+    border-radius: 7px;
+  }
   .textarea-container{
     display: flex;
     flex-direction: column;
