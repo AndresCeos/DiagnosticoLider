@@ -2,6 +2,7 @@ import './App.css';
 import {BrowserRouter, Routes, Route } from 'react-router-dom';
 import FormularioRadar from './components/FormularioRadar';
 import EncuestaSatisfaccion from './components/EncuestaSatisfaccion';
+import BriefFormulario from './components/BriefForm';
 
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
         <Routes>
             <Route path="/" element={<FormularioRadar />} />
             <Route path="satisfaccion" element={<EncuestaSatisfaccion />} />
+            <Route path='brief' element={<BriefFormulario />} />
             <Route path="*" element={<h1>404</h1>} />
         </Routes>
     </BrowserRouter>
