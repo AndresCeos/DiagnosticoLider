@@ -3,6 +3,7 @@ import './FormularioRadar.css';
 import Swal from "sweetalert2";
 import jsPDF from "jspdf";
 import {base64Image} from './image';
+import { put } from "@vercel/blob";
 
 
 
@@ -54,7 +55,7 @@ export default function BriefFormulario() {
     }
   };
 
-  const exportToPDF = () => {
+  const exportToPDF = async () => {
     try {
       const doc = new jsPDF({ format: 'a4', unit: 'mm' });
       let yPosition = 10;
@@ -148,9 +149,22 @@ export default function BriefFormulario() {
         // Actualizar posición Y
         yPosition += (valueLines.length > 1) ? (5 * valueLines.length) : 5;
       });
-      
-  
-      doc.save(`${formattedDate}_Brief del Servicio.pdf`);
+      const pdfBlob = doc.output('blob');
+
+      const { url } = await put(`brief/${formattedDate}_${formData.vendedor === "other" ? formData.otherVendedor : formData.vendedor}_Brief del Servicio.pdf`, pdfBlob, {
+        access: 'public',
+        token: "vercel_blob_rw_KwdI4XyihBuH5ui9_aAvPjetIZhwukC2fUsDQO0zsf8zRVd" // Token seguro desde variables de entorno
+      }).then(() => {
+        Swal.fire({
+          title: 'Formulario enviado',
+          text: 'Datos enviados con éxito',
+          icon: 'success',
+          confirmButtonText: 'Cerrar'
+        })
+      });
+
+      return url;
+      // doc.save(`${formattedDate}_Brief del Servicio.pdf`);
     } catch (error) {
       console.error("Error al generar el PDF:", error);
     }
@@ -159,61 +173,8 @@ export default function BriefFormulario() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formBody = {
-      tipoContenido : formData.tipoContenido.join(", "),
-      empresa : formData.empresa,
-      sector : formData.sector,
-      liderNombre : formData.liderNombre,
-      trayectoriaAcademica : formData.trayectoriaAcademica,
-      trayectoriaProfesional : formData.trayectoriaProfesional,
-      historiaEmpresa : formData.historiaEmpresa,
-      productosServicios : formData.productosServicios,
-      mensajePrincipal : formData.mensajePrincipal,
-      reconocimientoActual : formData.reconocimientoActual,
-      diferenciador : formData.diferenciador,
-      competidores : formData.competidores,
-      logros : formData.logros,
-      mediosPublicitarios : formData.mediosPublicitarios,
-      mercadoObjetivo : formData.mercadoObjetivo,
-      redesSociales : formData.redesSociales.join(", "),
-      facebook : formData.facebook,
-      instagram : formData.instagram,
-      tiktok : formData.tiktok,
-      linkedin : formData.linkedin,
-      twitter : formData.twitter,
-      paginaweb : formData.paginaweb,
-      instalacionesFotos : formData.instalacionesFotos ? "Si" : "No",
-      fotosIncluidas : formData.fotosIncluidas ? "Si" : "No",
-      vendedor : formData.vendedor,
-      otherVendedor : formData.otherVendedor
-    }
 
     exportToPDF();
-
-console.log(formBody)
-
-
-    /*const scriptURL = 'https://script.google.com/macros/s/AKfycbxkQln5F5agsy34MGDSVn_Snep7J9VpLDbwRJZtEtLRFmwHzbN8J4MRqoUOol4Pqmzt9g/exec';
-    try{
-    const response = await fetch(scriptURL, {
-      method: 'POST',
-      body: JSON.stringify(formBody),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      mode: 'no-cors',
-    });
-    const result = await response.json();
-    console.log('Success:', result);
-    } catch (error) {
-      console.error('Error sending data to Google Sheets:', error);
-    }
-    Swal.fire({
-      title: 'Formulario enviado',
-      text: 'Datos enviados con éxito',
-      icon: 'success',
-      confirmButtonText: 'Cerrar'
-    })*/
 
   };
 
