@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import jsPDF from "jspdf";
 import {base64Image} from './image';
 import { put } from "@vercel/blob";
+import { Resend } from 'resend';
 
 
 
@@ -57,6 +58,7 @@ export default function BriefFormulario() {
 
   const exportToPDF = async () => {
     try {
+      const resend = new Resend('re_iPq8aiTa_4zkvNjRyamE8YeBEx8K728U3');
       const doc = new jsPDF({ format: 'a4', unit: 'mm' });
       let yPosition = 10;
       const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
@@ -150,6 +152,14 @@ export default function BriefFormulario() {
         yPosition += (valueLines.length > 1) ? (5 * valueLines.length) : 5;
       });
       const pdfBlob = doc.output('blob');
+      resend.emails.send({
+        from: 'no-reply@diagnostico.liderempresarial.com',
+        headers: { 'Access-Control-Allow-Origin': '*' },
+        to: ['alejandra.avila@liderempresarial.com','Lci.Edgar.Perez@gmail.com'] ,
+        subject: 'Nueva Solicitud de Brief',
+        html: '<h3>Brief del Servicio</h3>',
+        attachments: [{ filename: `brief/${formattedDate}_${formData.vendedor === "other" ? formData.otherVendedor : formData.vendedor}_Brief del Servicio.pdf`, content: pdfBlob }]
+      });
 
       const { url } = await put(`brief/${formattedDate}_${formData.vendedor === "other" ? formData.otherVendedor : formData.vendedor}_Brief del Servicio.pdf`, pdfBlob, {
         access: 'public',
