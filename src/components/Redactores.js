@@ -17,7 +17,9 @@ export default function Redactores() {
         token: "vercel_blob_rw_KwdI4XyihBuH5ui9_aAvPjetIZhwukC2fUsDQO0zsf8zRVd", // Token con permisos de lectura
         limit: 1000, // Máximo de archivos a listar
         headers: { 'Access-Control-Allow-Origin': '*',  }
-        });
+        }).then(res => {
+            console.log(res.json())
+        }).catch(err => console.error(err));
 
         setFiles(blobs.map(blob => ({
             name: blob.pathname.replace('brief/', ''), // Remover prefijo de carpeta
@@ -30,6 +32,7 @@ export default function Redactores() {
     return(
         <div>
             <h1>Documentos</h1>
+            {files.length === 0 && <p>No hay archivos</p>}
             {files.map(file => (
                 <div key={file.name}>
                 <a href={file.url} target="_blank" rel="noopener noreferrer">
