@@ -38,6 +38,10 @@ export default function BriefFormulario() {
     otherVendedor: "",
   
   });
+  const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+  const date = new Date();
+  const formattedDate = `${date.getDate()}-${meses[date.getMonth()]}-${date.getFullYear()}`;
+  const formateDateTitle = `${date.getDate()} de ${meses[date.getMonth()]} del ${date.getFullYear()}`;
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -58,16 +62,8 @@ export default function BriefFormulario() {
 
   const exportToPDF = async () => {
     try {
-      const resend = new Resend('re_iPq8aiTa_4zkvNjRyamE8YeBEx8K728U3');
       const doc = new jsPDF({ format: 'a4', unit: 'mm' });
       let yPosition = 10;
-      const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-
-
-      const date = new Date();
-      const formattedDate = `${date.getDate()}-${meses[date.getMonth()]}-${date.getFullYear()}`;
-      const formateDateTitle = `${date.getDate()} de ${meses[date.getMonth()]} del ${date.getFullYear()}`;
-  
       // Logo
       doc.addImage(base64Image, 'PNG', 10, yPosition, 50, 20);
       yPosition += 30;
@@ -152,41 +148,68 @@ export default function BriefFormulario() {
         yPosition += (valueLines.length > 1) ? (5 * valueLines.length) : 5;
       });
       const pdfBlob = doc.output('blob');
-      resend.emails.send({
-        from: 'no-reply@diagnostico.liderempresarial.com',
-        headers: { 'Access-Control-Allow-Origin': '*' },
-        to: ['alejandra.avila@liderempresarial.com','Lci.Edgar.Perez@gmail.com'] ,
-        subject: 'Nueva Solicitud de Brief',
-        html: '<h3>Brief del Servicio</h3>',
-        attachments: [{ filename: `brief/${formattedDate}_${formData.vendedor === "other" ? formData.otherVendedor : formData.vendedor}_Brief del Servicio.pdf`, content: pdfBlob }]
-      });
 
-      const { url } = await put(`brief/${formattedDate}_${formData.vendedor === "other" ? formData.otherVendedor : formData.vendedor}_Brief del Servicio.pdf`, pdfBlob, {
+      await put(`brief/${formattedDate}_${formData.vendedor === "other" ? formData.otherVendedor : formData.vendedor}_Brief del Servicio.pdf`, pdfBlob, {
         access: 'public',
         token: "vercel_blob_rw_KwdI4XyihBuH5ui9_aAvPjetIZhwukC2fUsDQO0zsf8zRVd" // Token seguro desde variables de entorno
+      });
+
+      return pdfBlob;
+      // doc.save(`${formattedDate}_Brief del Servicio.pdf`);
+    } catch (error) {
+      console.error("Error al generar el PDF:", error);
+    }
+  };
+  const sendEmail = async (pdfBlob) => {
+    try {
+      const resend = new Resend('re_iPq8aiTa_4zkvNjRyamE8YeBEx8K728U3');
+      await resend.emails.send({
+        from: 'no-reply@resend.dev',
+        headers: { 'Access-Control-Allow-Origin': '*' , 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type, Authorization' },
+        to: ['alejandra.avila@liderempresarial.com','Lci.Edgar.Perez@gmail.com','andres@ceosnm.com'] ,
+        subject: 'Nueva Solicitud de Brief',
+        html: '<h3>Brief del Servicio</h3>',
+        attachments: [{ filename: `${formattedDate}_${formData.vendedor === "other" ? formData.otherVendedor : formData.vendedor}_Brief del Servicio.pdf`, content: pdfBlob }]
+      });
+    } catch (error) {
+      console.error("Error al enviar el correo:", error);
+    } }
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const RESEND_API_KEY = 're_iPq8aiTa_4zkvNjRyamE8YeBEx8K728U3';
+      const pdf = exportToPDF();
+      await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${RESEND_API_KEY}`,
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+        },
+        body: JSON.stringify({
+          from: 'no-reply@resend.dev',
+            to: ['alejandra.avila@liderempresarial.com','Lci.Edgar.Perez@gmail.com','andres@ceosnm.com'] ,
+            subject: 'Nueva Solicitud de Brief',
+            html: '<h3>Brief del Servicio</h3>',
+          attachments: [{ filename: `${formattedDate}_Brief del Servicio.pdf`, content: pdf }],
+        }),
       }).then(() => {
         Swal.fire({
           title: 'Formulario enviado',
           text: 'Datos enviados con éxito',
           icon: 'success',
           confirmButtonText: 'Cerrar'
-        })
+        });
+      }).catch((error) => {
+        console.error("Error al enviar el correo:", error);
       });
-
-      return url;
-      // doc.save(`${formattedDate}_Brief del Servicio.pdf`);
     } catch (error) {
-      console.error("Error al generar el PDF:", error);
-    }
-  };
-
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    exportToPDF();
-
-  };
+      console.error("Error al enviar el formulario:", error);
+    }}
 
   return (
     <div className="formulario-radar-container">
