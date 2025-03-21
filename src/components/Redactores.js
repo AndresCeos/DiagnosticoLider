@@ -27,7 +27,7 @@ export default function Redactores() {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
+                'Access-Control-Allow-Origin': 'https://diagnostico.liderempresarial.com'
             },
             mode: 'no-cors'
         });
