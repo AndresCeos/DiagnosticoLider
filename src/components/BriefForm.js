@@ -5,7 +5,7 @@ import jsPDF from "jspdf";
 import {base64Image} from './image';
 import { put } from "@vercel/blob";
 import { Resend } from 'resend';
-
+import emailjs from 'emailjs-com';
 
 
 export default function BriefFormulario() {
@@ -179,25 +179,36 @@ export default function BriefFormulario() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const RESEND_API_KEY = 're_iPq8aiTa_4zkvNjRyamE8YeBEx8K728U3';
-      const pdf = exportToPDF();
-      await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${RESEND_API_KEY}`,
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-        },
-        body: JSON.stringify({
-          from: 'no-reply@resend.dev',
-            to: ['alejandra.avila@liderempresarial.com','Lci.Edgar.Perez@gmail.com','andres@ceosnm.com'] ,
-            subject: 'Nueva Solicitud de Brief',
-            html: '<h3>Brief del Servicio</h3>',
-          attachments: [{ filename: `${formattedDate}_Brief del Servicio.pdf`, content: pdf }],
-        }),
-      }).then(() => {
+      const emailParams = {
+        fecha: formateDateTitle,
+        tipoContenido: formData.tipoContenido,
+        empresa: formData.empresa,
+        sector: formData.sector,
+        liderNombre: formData.liderNombre,
+        trayectoriaAcademica: formData.trayectoriaAcademica,
+        trayectoriaProfesional: formData.trayectoriaProfesional,
+        historiaEmpresa: formData.historiaEmpresa,
+        productosServicios: formData.productosServicios,
+        mensajePrincipal: formData.mensajePrincipal,
+        reconocimientoActual: formData.reconocimientoActual,
+        diferenciador: formData.diferenciador,
+        competidores: formData.competidores,
+        logros: formData.logros,
+        mediosPublicitarios: formData.mediosPublicitarios,
+        mercadoObjetivo: formData.mercadoObjetivo,
+        facebook: formData.facebook,
+        instagram: formData.instagram,
+        tiktok: formData.tiktok,
+        linkedin: formData.linkedin,
+        twitter: formData.twitter,
+        paginaweb: formData.paginaweb,
+        instalacionesFotos: formData.instalacionesFotos,
+        fotosIncluidas: formData.fotosIncluidas,
+        vendedor: formData.vendedor === "other" ? formData.otherVendedor : formData.vendedor
+      }
+      //exportToPDF();
+      emailjs.send('service_1ai7fib','template_jfeg5z9',emailParams,'k3Gtkyg7rjueQ6Ff2')
+      .then(() => {
         Swal.fire({
           title: 'Formulario enviado',
           text: 'Datos enviados con éxito',
