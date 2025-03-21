@@ -9,31 +9,23 @@ export default function Redactores() {
     useEffect(() => {
         listBriefFiles();
     }, []);
-
-    const listBriefFiles = async () => {
-    try {
+  
+   const listBriefFiles = async () => {
+    
         // Listar archivos con prefijo "brief/"
         const { blobs } = await list({
-        prefix: 'brief/',
         token: "vercel_blob_rw_KwdI4XyihBuH5ui9_aAvPjetIZhwukC2fUsDQO0zsf8zRVd", // Token con permisos de lectura
-        limit: 1000 // Máximo de archivos a listar
+        limit: 1000, // Máximo de archivos a listar
+        headers: { 'Access-Control-Allow-Origin': '*',  }
         });
 
-        setFiles(blobs);
-
-        // Mapear resultados a formato útil
-        /*return blobs.map(blob => ({
-        name: blob.pathname.replace('brief/', ''), // Remover prefijo de carpeta
-        url: blob.url,
-        size: blob.size,
-        uploadedAt: blob.uploadedAt
-        }));*/
-
-
-    } catch (error) {
-        console.error('Error al listar archivos:', error);
-        throw error;
-    }
+        setFiles(blobs.map(blob => ({
+            name: blob.pathname.replace('brief/', ''), // Remover prefijo de carpeta
+            url: blob.url,
+            size: blob.size,
+            uploadedAt: blob.uploadedAt
+            })));
+        console.log(files);
     };
     return(
         <div>
