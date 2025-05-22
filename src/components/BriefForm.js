@@ -308,7 +308,7 @@ export default function BriefFormulario() {
             <span className="text-xs text-gray-500">Máximo 250 caracteres</ span>
           </div>
           <div className="client-data-field">
-            <label>¿Cómo conocen actualmente tu empresa en el mercado?</label>
+            <label>¿Cómo es conocida actualmente tu empresa en el mercado?</label>
             <textarea className="textareabrief" name="reconocimientoActual" placeholder="" onChange={handleChange} maxLength={200} required ></textarea>
             <span className="text-xs text-gray-500">Máximo 200 caracteres</ span>
           </div>
