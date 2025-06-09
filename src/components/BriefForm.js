@@ -14,21 +14,15 @@ export default function BriefFormulario() {
     empresa: "",
     sector: "",
     liderNombre: "",
-    trayectoriaAcademica: "",
-    trayectoriaProfesional: "",
+    trayectoriaAcademicaProfesional: "",
     historiaEmpresa: "",
     productosServicios: "",
     mensajePrincipal: "",
-    reconocimientoActual: "",
     diferenciador: "",
-    competidores: "",
     logros: "",
-    mediosPublicitarios: "",
-    mercadoObjetivo: "",
     redesSociales: [],
     facebook:"",
     instagram: "",
-    tiktok: "",
     linkedin: "",
     twitter: "",
     paginaweb: "",
@@ -42,7 +36,7 @@ export default function BriefFormulario() {
   const date = new Date();
   const formattedDate = `${date.getDate()}-${meses[date.getMonth()]}-${date.getFullYear()}`;
   const formateDateTitle = `${date.getDate()} de ${meses[date.getMonth()]} del ${date.getFullYear()}`;
-
+  const redes = ['Facebook', 'Instagram', 'Twitter', 'LinkedIn', 'Página Web'];
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === "checkbox") {
@@ -185,20 +179,14 @@ export default function BriefFormulario() {
         empresa: formData.empresa,
         sector: formData.sector,
         liderNombre: formData.liderNombre,
-        trayectoriaAcademica: formData.trayectoriaAcademica,
-        trayectoriaProfesional: formData.trayectoriaProfesional,
+        trayectoriaAcademicaProfesional: formData.trayectoriaAcademicaProfesional,
         historiaEmpresa: formData.historiaEmpresa,
         productosServicios: formData.productosServicios,
         mensajePrincipal: formData.mensajePrincipal,
-        reconocimientoActual: formData.reconocimientoActual,
         diferenciador: formData.diferenciador,
-        competidores: formData.competidores,
         logros: formData.logros,
-        mediosPublicitarios: formData.mediosPublicitarios,
-        mercadoObjetivo: formData.mercadoObjetivo,
         facebook: formData.facebook,
         instagram: formData.instagram,
-        tiktok: formData.tiktok,
         linkedin: formData.linkedin,
         twitter: formData.twitter,
         paginaweb: formData.paginaweb,
@@ -273,28 +261,19 @@ export default function BriefFormulario() {
         </div>
 
         <div className="client-data-container">
-          <h3 className="client-data-title">INFORMACIÓN DEL LÍDER</h3>
-          <div className="client-data-field">
-            <label>Trayectoria académica (carreras, posgrados, instituciones)</label>
-            <textarea className="textareabrief" name="trayectoriaAcademica" placeholder="" onChange={handleChange} required maxLength={200} ></textarea>
-            <span className="text-xs text-gray-500">Máximo 200 caracteres</ span>
-          </div>
-          <div className="client-data-field">
-            <label>Trayectoria profesional (cargos e instituciones donde ha trabajado)</label>
-            <textarea className="textareabrief" name="trayectoriaProfesional" placeholder="" onChange={handleChange} maxLength={200} required ></textarea>
-            <span className="text-xs text-gray-500">Máximo 200 caracteres</ span>
-          </div>
-        </div>
-
-        <div className="client-data-container">
           <h3 className="client-data-title">INFORMACIÓN DE LA EMPRESA</h3>
+            <div className="client-data-field">
+            <label>Trayectoria académica y profesional del Líder</label>
+            <textarea className="textareabrief" name="trayectoriaAcademicaProfesional" placeholder="" onChange={handleChange} maxLength={200} required ></textarea>
+            <span className="text-xs text-gray-500">Máximo 200 caracteres</ span>
+          </div>
           <div className="client-data-field">
-            <label>Breve historia de la empresa</label>
+            <label>Resumen ejecutivo de la empresa</label>
             <textarea className="textareabrief" name="historiaEmpresa" placeholder="" onChange={handleChange} maxLength={250} required ></textarea>
             <span className="text-xs text-gray-500">Máximo 250 caracteres</ span>
           </div>
           <div className="client-data-field">
-            <label>Productos o servicio que ofrecen (descripción breve de cada uno)</label>
+            <label>Productos y/o servicios que ofrecen y sus principales características (Descripción de cada uno de ellos).</label>
             <textarea className="textareabrief" name="productosServicios" placeholder="" onChange={handleChange} maxLength={250} required ></textarea>
             <span className="text-xs text-gray-500">Máximo 250 caracteres</ span>
           </div>
@@ -303,39 +282,19 @@ export default function BriefFormulario() {
         <div className="client-data-container">
           <h3 className="client-data-title">ENFOQUE DEL ARTÍCULO</h3>
           <div className="client-data-field">
-            <label>¿Qué mensaje principal quieres comunicar?</label>
+            <label>¿Cuál es la intención principal y estrategia de comunicación que quiere dar a conocer?</label>
             <textarea className="textareabrief" name="mensajePrincipal" placeholder="" onChange={handleChange} maxLength={250}required ></textarea>
             <span className="text-xs text-gray-500">Máximo 250 caracteres</ span>
           </div>
           <div className="client-data-field">
-            <label>¿Cómo es conocida actualmente tu empresa en el mercado?</label>
-            <textarea className="textareabrief" name="reconocimientoActual" placeholder="" onChange={handleChange} maxLength={200} required ></textarea>
-            <span className="text-xs text-gray-500">Máximo 200 caracteres</ span>
-          </div>
-          <div className="client-data-field">
-            <label>¿Cuál es el principal diferenciador o ventaja competitiva de tu empresa?</label>
+            <label>¿Cuál es el principal diferenciador de la empresa o ventaja competitiva?</label>
             <textarea className="textareabrief" name="diferenciador" placeholder="" onChange={handleChange} maxLength={200} required ></textarea>
             <span className="text-xs text-gray-500">Máximo 200 caracteres</ span>
           </div>
           <div className="client-data-field">
-            <label>¿Quiénes son tus competidores directos?</label>
-            <textarea className="textareabrief" name="competidores" placeholder="" onChange={handleChange} maxLength={100} required ></textarea>
-            <span className="text-xs text-gray-500">Máximo 100 caracteres</ span>
-          </div>
-          <div className="client-data-field">
-            <label>¿Qué logros recientes de la empresa te gustaría destacar?</label>
-            <textarea className="textareabrief" name="logros" placeholder="" onChange={handleChange} maxLength={250} required ></textarea>
-            <span className="text-xs text-gray-500">Máximo 250 caracteres</ span>
-          </div>
-          <div className="client-data-field">
-            <label>¿Qué medios publicitarios has usado recientemente?</label>
-            <textarea className="textareabrief" name="mediosPublicitarios" placeholder="" onChange={handleChange} maxLength={100} required ></textarea>
-            <span className="text-xs text-gray-500">Máximo 100 caracteres</ span>
-          </div>
-          <div className="client-data-field">
-            <label>¿A qué cliente o mercado te gustaría llegar?</label>
-            <textarea className="textareabrief" name="mercadoObjetivo" placeholder="" onChange={handleChange} maxLength={100} required ></textarea>
-            <span className="text-xs text-gray-500">Máximo 100 caracteres</ span>
+            <label>¿Cuáles son los últimos grandes logros de la empresa que desea que se resalten en el publirreportaje?</label>
+            <textarea className="textareabrief" name="logros" placeholder="" onChange={handleChange} maxLength={200} required ></textarea>
+            <span className="text-xs text-gray-500">Máximo 200 caracteres</ span>
           </div>
         </div>
 
@@ -343,9 +302,9 @@ export default function BriefFormulario() {
           <h3 className="client-data-title">MEDIOS DIGITALES</h3>
           <div className="client-data-field">
             <label>¿Tienes redes sociales? (Marca las que uses y proporciona los enlaces):</label>
-            {["facebook", "instagram", "tiktok", "twitter", "linkedIn", "paginaweb"].map((item) => (
+            {["facebook", "instagram", "twitter", "linkedin", "paginaweb"].map((item, index) => (
               <div key={item} className="flex pb-5 items-baseline">
-                <div><input type="checkbox" style={{ width: "50px" }}  name="redesSociales" value={item} onChange={handleChange} /> {item}</div>
+                <div><input type="checkbox" style={{ width: "50px" }}  name="redesSociales" value={item} onChange={handleChange} /> {redes[index]}</div>
                 <input type="text" name={item} placeholder="Enlace" maxLength={50} onChange={handleChange} style={{ width: "50%", marginLeft: "10px" }} disabled={!formData.redesSociales.includes(item)}/>
               </div>
             ))}
