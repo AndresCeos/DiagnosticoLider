@@ -252,6 +252,7 @@ export default function BriefFormulario() {
               <option value="Luis Fernando" >Luis Fernando Macias</option>
               <option value="Lyly Escobedo" >Lyly Escobedo</option>
               <option value="Mayra Vargas" >Mayra Vargas</option>
+              <option value="Elisa Velasco" >Elisa Velasco</option>
               <option value="Otro" >Otro</option>
             </select>
             {formData.vendedor === "Otro"  &&  (
